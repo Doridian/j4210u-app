@@ -137,8 +137,6 @@ public class UhfAppComposite extends Composite {
 	private boolean scanning_ = false;
 	private Timer timer_ = null;
 
-	public static final String DOWNLOAD_PAGE = "https://jence.com/web/index.php?route=product/product&path=69_25_225&product_id=792";
-	public static final String LATEST_VERSION_PAGE = "http://jence.com/downloads/version.properties";
 	public static final String[] AUTODETECTED_CHIPS = {
 			TagType.HIGGS_3.toString(), TagType.HIGGS_4.name(),
 			TagType.HIGGS_EC.name(), TagType.IMPINJ_M730.name(),
@@ -229,8 +227,8 @@ public class UhfAppComposite extends Composite {
 							if (column < 1)
 								continue; // thse are read only type
 							// do not allow to edit TID
-							if (index == 1)
-								continue;
+							//if (index == 1)
+							//	continue;
 							final Text text = new Text(table, SWT.CENTER);
 							text.setBackground(COLOR_ORANGE);
 							text.setTextLimit(4);
@@ -702,7 +700,7 @@ public class UhfAppComposite extends Composite {
 
 		total2_ = new Text(composite_10, SWT.BORDER | SWT.READ_ONLY);
 		total2_.setToolTipText("Total Memory in Bits");
-		total2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
+		total2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_YELLOW));
 		total2_.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 
@@ -714,7 +712,7 @@ public class UhfAppComposite extends Composite {
 
 		pwdlen2_ = new Text(composite_10, SWT.BORDER | SWT.READ_ONLY);
 		pwdlen2_.setToolTipText("Password Length in Bits");
-		pwdlen2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
+		pwdlen2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_YELLOW));
 		pwdlen2_.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 
@@ -728,7 +726,7 @@ public class UhfAppComposite extends Composite {
 
 		epclen2_ = new Text(composite_10, SWT.BORDER | SWT.READ_ONLY);
 		epclen2_.setToolTipText("EPC Length in Bits");
-		epclen2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
+		epclen2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_YELLOW));
 		epclen2_.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 
@@ -740,7 +738,7 @@ public class UhfAppComposite extends Composite {
 
 		tidlen2_ = new Text(composite_10, SWT.BORDER | SWT.READ_ONLY);
 		tidlen2_.setToolTipText("TID Length in Bits");
-		tidlen2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
+		tidlen2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_YELLOW));
 		tidlen2_.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 
@@ -752,7 +750,7 @@ public class UhfAppComposite extends Composite {
 
 		usrlen2_ = new Text(composite_10, SWT.BORDER | SWT.READ_ONLY);
 		usrlen2_.setToolTipText("User Memory Size in Bits");
-		usrlen2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
+		usrlen2_.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_YELLOW));
 		usrlen2_.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
 				1, 1));
 
@@ -798,12 +796,13 @@ public class UhfAppComposite extends Composite {
 		tblclmnData.setText("Word 7");
 
 		tableItem = new TableItem(memory_, SWT.NONE);
-		tableItem.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
+		tableItem.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_YELLOW));
 		tableItem.setText("EPC");
 
 		tableItem_1 = new TableItem(memory_, SWT.NONE);
 		tableItem_1.setBackground(SWTResourceManager
 				.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		tableItem_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
 		tableItem_1.setText("TID");
 
 		tbtmEmulate = new TabItem(tabFolder, SWT.NONE);
@@ -923,34 +922,6 @@ public class UhfAppComposite extends Composite {
 		lblNewLabel_1.setText("| Application Version: " + UhfApp.VERSION);
 
 		// this.pack();
-		checkVersion();
-	}
-
-	private void checkVersion() {
-		try {
-			URL url = new URL(LATEST_VERSION_PAGE);
-			URLConnection con = url.openConnection();
-			InputStream stream = con.getInputStream();
-			Properties properties = new Properties();
-			properties.load(stream);
-			String version = properties.getProperty("J4210U");
-			if (version.compareTo(UhfApp.VERSION) > 0) {
-				if (UhfApp
-						.prompt(getShell(),
-								"New version "
-										+ version
-										+ " found. You can download the latest version by clicking the OK button.",
-								SWT.OK | SWT.CANCEL) == SWT.OK) {
-					java.awt.Desktop.getDesktop()
-							.browse(new URI(DOWNLOAD_PAGE));
-				}
-			}
-			System.out.println(properties);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}
 
 	private boolean disconnect() {
@@ -1196,7 +1167,7 @@ public class UhfAppComposite extends Composite {
 				epc = Arrays.copyOf(epc, epclen);
 			}
 			TableItem epcrow = new TableItem(memory_, SWT.FULL_SELECTION);
-			epcrow.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
+			epcrow.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_YELLOW));
 			epcrow.setText(0, "EPC");
 			for (int i = 0; i < sr.EPC.length; i += 2) {
 				byte[] word = Arrays.copyOfRange(sr.EPC, i, i + 2);
@@ -1204,7 +1175,7 @@ public class UhfAppComposite extends Composite {
 				epcrow.setText(1 + i / 2, hex);
 			}
 			TableItem tidrow = new TableItem(memory_, SWT.FULL_SELECTION);
-			tidrow.setBackground(SWTResourceManager.getColor(SWT.COLOR_GREEN));
+			tidrow.setBackground(SWTResourceManager.getColor(SWT.COLOR_DARK_GREEN));
 			tidrow.setText(0, "TID");
 			status("Reading TID");
 			byte[] tid = UhfApp.driver_.getTID(epc);
@@ -1246,7 +1217,7 @@ public class UhfAppComposite extends Composite {
 					final String label = "USER[" + i + ".." + (i + 8 - 1) + "]";
 					userrow.setText(0, label);
 					userrow.setBackground(SWTResourceManager
-							.getColor(SWT.COLOR_CYAN));
+							.getColor(SWT.COLOR_DARK_CYAN));
 				}
 				byte[] word = new byte[2];
 				status("Reading User Memory address " + i);
