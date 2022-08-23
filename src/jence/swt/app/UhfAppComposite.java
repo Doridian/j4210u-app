@@ -335,7 +335,7 @@ public class UhfAppComposite extends Composite {
 		comboBaudrate_ = new Combo(composite_7, SWT.READ_ONLY);
 		comboBaudrate_.setItems(new String[] {"9600", "19200", "38400", "57600", "115200"});
 		comboBaudrate_.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		comboBaudrate_.select(3);
+		comboBaudrate_.select(4);
 
 		btnRefresh_ = new Button(composite_1, SWT.NONE);
 		btnRefresh_.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 1));
