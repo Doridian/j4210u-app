@@ -180,6 +180,7 @@ public class UhfAppComposite extends Composite {
 	}
 
 	public void status(String text) {
+		System.out.println(text);
 		lblStatus_.setText(text);
 	}
 
@@ -335,7 +336,7 @@ public class UhfAppComposite extends Composite {
 		comboBaudrate_ = new Combo(composite_7, SWT.READ_ONLY);
 		comboBaudrate_.setItems(new String[] {"9600", "19200", "38400", "57600", "115200"});
 		comboBaudrate_.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		comboBaudrate_.select(4);
+		comboBaudrate_.select(3);
 
 		btnRefresh_ = new Button(composite_1, SWT.NONE);
 		btnRefresh_.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 1));
@@ -1293,6 +1294,25 @@ public class UhfAppComposite extends Composite {
 				}
 			}
 
+			// change TID
+			TableItem tiditem = memory_.getItem(1);
+			for (int j = 1; j < column; j++) {
+				String oldData = (String) tiditem.getData(j + "");
+				if (oldData == null) {
+					continue;
+				}
+				String newData = tiditem.getText(j);
+				int d = Integer.parseInt(newData, 16);
+				data[0] = (byte) ((d >> 8) & 0xFF);
+				data[1] = (byte) (d & 0xFF);
+
+				int n = (j - 1) * 2;
+				int jj = j - 1;
+				syncstatus("Writing TID Word " + jj + " = "
+						+ UhfApp.driver_.toHex(data));
+				UhfApp.driver_.writeTidWord(epc, data, jj);
+			}
+			
 			epc = Arrays.copyOf(epc, epc.length);
 
 			// change EPC

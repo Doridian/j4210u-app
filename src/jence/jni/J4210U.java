@@ -6,6 +6,9 @@ package jence.jni;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
 
 /**
  * @author Ejaz Jamil
@@ -208,8 +211,20 @@ public class J4210U {
 
 	static {
 		System.loadLibrary("j4210u");
+		System.out.println(SpecialFuncs.INSTANCE);
 	}
 
+	public byte WriteTIDWord(byte[] epc, byte epclen, byte[] data, byte windex)
+	{
+		return SpecialFuncs.INSTANCE.Write(epc, epclen, data, (byte)1, windex, 2);
+	}
+	
+	public interface SpecialFuncs extends Library { 
+		SpecialFuncs INSTANCE = Native.load("j4210u", SpecialFuncs.class);
+		//byte WriteWord(byte[] epc, byte epclen, byte[] data, byte windex, int type);
+		byte Write(byte[] epc, byte epclen, byte[] data, byte wordlen, byte windex, int type);
+	}
+	
 	// Declare an instance native method sayHello() which receives no parameter
 	// and returns void
 	public native short AvailablePorts(byte[] ports);
@@ -446,10 +461,26 @@ public class J4210U {
 	}
 
 	/**
-	 * Writes EPC Word (16-bit) to the tag pointed by the epc value. The words will be written
+	 * Writes TID Word (16-bit) to the tag pointed by the epc value. The words will be written
 	 * into EPC memory's windex (word index) position.
 	 * 
 	 * @param epc tag's EPC value.
+	 * @param word a single word to write (16-bit or 2-bytes)
+	 * @param windex a word index (not byte index). A word index is even byte indexes.
+	 * @throws Exception a general exception is thrown.
+	 */
+	public void writeTidWord(byte[] epc, byte[] word, int windex) throws Exception {
+		
+		byte success = WriteTIDWord(epc, (byte)epc.length, word, (byte)windex);
+		//if (success == 0)
+		//	throw new Exception("Failed to write TID word.");
+	}
+
+	/**
+	 * Writes TID Word (16-bit) to the tag pointed by the tid value. The words will be written
+	 * into TID memory's windex (word index) position.
+	 * 
+	 * @param tid tag's EPC value.
 	 * @param word a single word to write (16-bit or 2-bytes)
 	 * @param windex a word index (not byte index). A word index is even byte indexes.
 	 * @throws Exception a general exception is thrown.
@@ -460,7 +491,7 @@ public class J4210U {
 		if (success == 0)
 			throw new Exception("Failed to write EPC word.");
 	}
-
+	
 	/**
 	 * Get TagInfo from TID.
 	 * 
